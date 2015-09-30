@@ -21,14 +21,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <libgen.h> //???
+#include <libgen.h> 
 #include <iostream>
-#include <unistd.h> //???
+#include <unistd.h> 
 #include <string>
 #include <chrono>
 #include <thread>
 #include <cmath>
-#include <inttypes.h> //???
+#include <inttypes.h>
 
 #include "drivers/LSM9DS0.h"
 #include "drivers/ADS1015.h"
@@ -58,25 +58,7 @@ float elapsed_secs 				= 0;
 int counter 					= 0;
 LSM9DS0 						*imu;
 mraa::I2c						*adc_i2c;
-
-/*
-static struct option long_options[] =
-{
-  // These options set a flag. 
-  {"verbose", no_argument,       &verbose_flag, 1},
-  {"brief",   no_argument,       &verbose_flag, 0},
-  // These options don’t set a flag.  We distinguish them by their indices. 
-  {"add",     no_argument,       0, 'a'},
-  {"append",  no_argument,       0, 'b'},
-  {"delete",  required_argument, 0, 'd'},
-  {"create",  required_argument, 0, 'c'},
-  {"file",    required_argument, 0, 'f'},
-  {0, 0, 0, 0}
-};
-
-// getopt_long stores the option index here. 
-int option_index = 0;
-*/	  
+  
 void showhelp()
 {
 	printf("Options:\n");
