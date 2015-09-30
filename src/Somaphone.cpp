@@ -1,6 +1,5 @@
 /*
- * Author: Jessica Gomez <jessica.gomez.hernandez@intel.com>
- * Copyright (c) 2015 Intel Corporation.
+ * Author: Antony Rayzhekov <antony@raijekov.cc>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
