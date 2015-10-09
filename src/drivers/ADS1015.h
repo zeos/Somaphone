@@ -69,9 +69,7 @@ class ads1015
 		cfgRegVal |= (channel<<CHANNEL_SHIFT) & CHANNEL_MASK; // put the channel bits in
 		
 		//add PGA for that channel !!!
-		//cfgRegVal |= RANGE_MASK;
 		//cfgRegVal |= (_range[channel] << RANGE_SHIFT) & RANGE_MASK;
-		
 		
 		cfgRegVal |= START_READ;    // set the start read bit
 

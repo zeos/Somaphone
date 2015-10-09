@@ -9,7 +9,7 @@ CC = g++
 
 SRC = src/
 # define any compile-time flags
-CFLAGS = -Wall -g -Wreorder -Waddress -std=c++11
+CFLAGS = -Wall -g -Waddress -std=c++11
 
 # define any directories containing header files other than /usr/include
 #

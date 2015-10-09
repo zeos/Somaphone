@@ -132,10 +132,11 @@ using namespace std::chrono;
 // I haven't noticed any reduction in solution accuracy. This is essentially the I coefficient in a PID control sense; 
 // the bigger the feedback coefficient, the faster the solution converges, usually at the expense of accuracy. 
 // In any case, this is the free parameter in the Madgwick filtering and fusion scheme.
-#define beta sqrt(3.0f / 4.0f) * GyroMeasError   // compute beta
-#define zeta sqrt(3.0f / 4.0f) * GyroMeasDrift   // compute zeta, the other free parameter in the Madgwick scheme usually set to a small or zero value
-#define Kp 2.0f * 5.0f // these are the free parameters in the Mahony filter and fusion scheme, Kp for proportional feedback, Ki for integral
-#define Ki 0.0f
+//#define beta sqrt(3.0f / 4.0f) * GyroMeasError   // compute beta
+#define zeta 		sqrt(3.0f / 4.0f) * GyroMeasDrift   // compute zeta, the other free parameter in the Madgwick scheme usually set to a small or zero value
+#define Kp 			2.0f * 5.0f // these are the free parameters in the Mahony filter and fusion scheme, Kp for proportional feedback, Ki for integral
+#define Ki 			0.0f
+#define betaDef		0.1f		// 2 * proportional gain
 
 class LSM9DS0
 {
@@ -226,15 +227,15 @@ public:
 	// axis. Call readGyro(), readAccel(), and readMag() first, before using
 	// these variables!
 	// These values are the RAW signed 16-bit readings from the sensors.
-	int16_t gx, gy, gz; // x, y, and z axis readings of the gyroscope
-	int16_t ax, ay, az; // x, y, and z axis readings of the accelerometer
-	int16_t mx, my, mz; // x, y, and z axis readings of the magnetometer
-	int16_t temperature;
+	int16_t ax_i, ay_i, az_i; // x, y, and z axis readings of the accelerometer
+	int16_t gx_i, gy_i, gz_i; // x, y, and z axis readings of the gyroscope
+	int16_t mx_i, my_i, mz_i; // x, y, and z axis readings of the magnetometer
+	int16_t temperature_i;
 	
-	float _ax, _ay, _az;
-	float _gx, _gy, _gz;
-	float _mx, _my, _mz;
-	float _temperature;
+	volatile float ax_f, ay_f, az_f;
+	volatile float gx_f, gy_f, gz_f;
+	volatile float mx_f, my_f, mz_f;
+	volatile float temperature_f;
 	
 	bool newAccelData 				= false;
 	bool newMagData 				= false;
@@ -242,13 +243,18 @@ public:
 	bool overflow 					= false;
 	
 	float pitch, yaw, roll, heading;
-	float deltat = 0.0f;        // integration interval for both filter schemes
+	float deltat = 0.08f;        // integration interval for both filter schemes
+	
 	high_resolution_clock::time_point lastUpdate = high_resolution_clock::now();    // used to calculate integration interval
 	high_resolution_clock::time_point Now = high_resolution_clock::now();;           // used to calculate integration interval
+	
 	float abias[3] = {0, 0, 0}, gbias[3] = {0, 0, 0};
+	
 	float q[4] = {1.0f, 0.0f, 0.0f, 0.0f}; // vector to hold quaternion
 	float eInt[3] = {0.0f, 0.0f, 0.0f}; // vector to hold integral error for Mahony method
-
+//x-io
+	volatile float beta = betaDef;								// 2 * proportional gain (Kp)
+	volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;	// quaternion of sensor frame relative to auxiliary frame
 
 	// LSM9DS0 -- LSM9DS0 class constructor
 	// The constructor will set up a handful of private variables, and set the
@@ -257,14 +263,21 @@ public:
 	//	- gAddr = I2C address of the gyroscope.
 	//	- xmAddr = I2C address of the accel/mag.
 	LSM9DS0(uint8_t gAddr, uint8_t xmAddr):
-	  gx(0), gy(0), gz(0),
-	  ax(0), ay(0), az(0),
-	  mx(0), my(0), mz(0),
-	  temperature(0),
-	  gScale(G_SCALE_245DPS), 
-	  aScale(A_SCALE_2G), 
-	  mScale(M_SCALE_2GS),
-	  gRes(0), aRes(0), mRes(0)
+		ax_i(0), ay_i(0), az_i(0),
+		gx_i(0), gy_i(0), gz_i(0),
+		mx_i(0), my_i(0), mz_i(0),
+	  	temperature_i(0),
+		
+		ax_f(0), ay_f(0), az_f(0),
+		gx_f(0), gy_f(0), gz_f(0),
+		mx_f(0), my_f(0), mz_f(0),
+		temperature_f(0),
+		
+		gScale(G_SCALE_245DPS), 
+		aScale(A_SCALE_2G), 
+		mScale(M_SCALE_2GS),
+		
+		gRes(0), aRes(0), mRes(0)
 	{
 	  gyro = new mraa::I2c(1);
 	  gyro->address(gAddr);
@@ -339,9 +352,9 @@ public:
 	{
 		uint8_t temp[6]; // We'll read six bytes from the gyro into temp
 		gReadBytes(OUT_X_L_G, temp, 6); // Read 6 bytes, beginning at OUT_X_L_G
-		gx = (temp[1] << 8) | temp[0]; // Store x-axis values into gx
-		gy = (temp[3] << 8) | temp[2]; // Store y-axis values into gy
-		gz = (temp[5] << 8) | temp[4]; // Store z-axis values into gz
+		gx_i = (temp[1] << 8) | temp[0]; // Store x-axis values into gx
+		gy_i = (temp[3] << 8) | temp[2]; // Store y-axis values into gy
+		gz_i = (temp[5] << 8) | temp[4]; // Store z-axis values into gz
 	}
 	
 	// readAccel() -- Read the accelerometer output registers.
@@ -352,9 +365,9 @@ public:
 	{
 		uint8_t temp[6]; // We'll read six bytes from the accelerometer into temp	
 		xmReadBytes(OUT_X_L_A, temp, 6); // Read 6 bytes, beginning at OUT_X_L_A
-		ax = (temp[1] << 8) | temp[0]; // Store x-axis values into ax
-		ay = (temp[3] << 8) | temp[2]; // Store y-axis values into ay
-		az = (temp[5] << 8) | temp[4]; // Store z-axis values into az
+		ax_i = (temp[1] << 8) | temp[0]; // Store x-axis values into ax
+		ay_i = (temp[3] << 8) | temp[2]; // Store y-axis values into ay
+		az_i = (temp[5] << 8) | temp[4]; // Store z-axis values into az
 	}
 	
 	// readMag() -- Read the magnetometer output registers.
@@ -365,9 +378,9 @@ public:
 	{
 		uint8_t temp[6]; // We'll read six bytes from the mag into temp	
 		xmReadBytes(OUT_X_L_M, temp, 6); // Read 6 bytes, beginning at OUT_X_L_M
-		mx = (temp[1] << 8) | temp[0]; // Store x-axis values into mx
-		my = (temp[3] << 8) | temp[2]; // Store y-axis values into my
-		mz = (temp[5] << 8) | temp[4]; // Store z-axis values into mz
+		mx_i = (temp[1] << 8) | temp[0]; // Store x-axis values into mx
+		my_i = (temp[3] << 8) | temp[2]; // Store y-axis values into my
+		mz_i = (temp[5] << 8) | temp[4]; // Store z-axis values into mz
 	}
 
 	// readTemp() -- Read the temperature output register.
@@ -378,7 +391,7 @@ public:
 	{
 		uint8_t temp[2]; // We'll read two bytes from the temperature sensor into temp	
 		xmReadBytes(OUT_TEMP_L_XM, temp, 2); // Read 2 bytes, beginning at OUT_TEMP_L_M
-		temperature =  int16_t(temp[0]) + (int16_t(temp[1])<<8) ; // Temperature is a 12-bit signed integer
+		temperature_i =  int16_t(temp[0]) + (int16_t(temp[1])<<8) ; // Temperature is a 12-bit signed integer
 	}
 	
 	// calcGyro() -- Convert from RAW signed 16-bit value to degrees per second
@@ -628,7 +641,7 @@ public:
 		return false;
 	}
 
-	void Read()
+	void Read(float sampleFreq)
 	{
 		//wait until all data is available, this will block execution, is there a better way? 
 		while ((newGyroData & newAccelData & newMagData) != true)
@@ -652,46 +665,47 @@ public:
 		newGyroData 	= false;
 		
 		readGyro();           // Read raw gyro data
-		_gx = calcGyro(gx) - gbias[0];   // Convert to degrees per seconds, remove gyro biases
-		_gy = calcGyro(gy) - gbias[1];
-		_gz = calcGyro(gz) - gbias[2];
+		gx_f = calcGyro(gx_i) - gbias[0];   // Convert to degrees per seconds, remove gyro biases
+		gy_f = calcGyro(gy_i) - gbias[1];
+		gz_f = calcGyro(gz_i) - gbias[2];
 		
 		readAccel();         // Read raw accelerometer data
-		_ax = calcAccel(ax) - abias[0];   // Convert to g's, remove accelerometer biases
-		_ay = calcAccel(ay) - abias[1];
-		_az = calcAccel(az) - abias[2];
+		ax_f = calcAccel(ax_i) - abias[0];   // Convert to g's, remove accelerometer biases
+		ay_f = calcAccel(ay_i) - abias[1];
+		az_f = calcAccel(az_i) - abias[2];
 		
 		readMag();           	// Read raw magnetometer data
-		_mx = calcMag(mx);     // Convert to Gauss and correct for calibration
-		_my = calcMag(my);
-		_mz = calcMag(mz);
+		mx_f = calcMag(mx_i);     // Convert to Gauss and correct for calibration
+		my_f = calcMag(my_i);
+		mz_f = calcMag(mz_i);
 		
 		readTemp();
-		_temperature = 21.0 + (float)temperature/8.; // slope is 8 LSB per degree C, just guessing at the intercept
-		
-		Now = high_resolution_clock::now();
-		
-		deltat = duration_cast<microseconds>(Now - lastUpdate).count() / 1000000.0f;
-		
-		lastUpdate = Now;
+		temperature_f = 21.0 + (float)temperature_i/8.; // slope is 8 LSB per degree C, just guessing at the intercept
 		
 		overflow = xDataOverflow() |  gDataOverflow() |   mDataOverflow();
 		
-		MadgwickQuaternionUpdate(_ax, _ay, _az, _gx*M_PI/180.0f, _gy*M_PI/180.0f, _gz*M_PI/180.0f, _mx, _my, _mz);
+		//calc orientation 
+		Now = high_resolution_clock::now();
+		deltat = duration_cast<microseconds>(Now - lastUpdate).count() / 1000000.0f;
 		
-		CalcAngles();
+		//MadgwickQuaternionUpdate(ax_f, ay_f, az_f, gx_f*M_PI/180.0f, gy_f*M_PI/180.0f, gz_f*M_PI/180.0f, mx_f, my_f, mz_f);
+		MadgwickAHRSupdate(gx_f*M_PI/180.0f, gy_f*M_PI/180.0f, gz_f*M_PI/180.0f, ax_f, ay_f, az_f, mx_f, my_f, mz_f, deltat); //-> 1/sampleFreq
+		
+		CalcAngles(q0, q1, q2, q3, 3.58); //declination in Vienna = 3.58
+		
+		lastUpdate = high_resolution_clock::now();
 	}
 	
 private:	
 
-	mraa::I2c* gyro;
-	mraa::I2c* xm;
+	mraa::I2c* 	gyro;
+	mraa::I2c* 	xm;
 	// gScale, aScale, and mScale store the current scale range for each 
 	// sensor. Should be updated whenever that value changes.
-	gyro_scale gScale;
+	gyro_scale 	gScale;
 	accel_scale aScale;
-	mag_scale mScale;
-		
+	mag_scale 	mScale;
+	
 	uint32_t micros();
 	
 	// gRes, aRes, and mRes store the current resolution for each sensor. 
@@ -990,26 +1004,8 @@ private:
 			   (((float) aScale + 1.0) * 2.0) / 32768.0;
 	}
 	
-	// Define output variables from updated quaternion---these are Tait-Bryan angles, commonly used in aircraft orientation.
-	// In this coordinate system, the positive z-axis is down toward Earth. 
-	// Yaw is the angle between Sensor x-axis and Earth magnetic North (or true North if corrected for local declination), 
-	// looking down on the sensor positive yaw is counterclockwise.
-	// Pitch is angle between sensor x-axis and Earth ground plane, toward the Earth is positive, up toward the sky is negative.
-	// Roll is angle between sensor y-axis and Earth ground plane, y-axis up is positive roll.
-	// These arise from the definition of the homogeneous rotation matrix constructed from quaternions.
-	// Tait-Bryan angles as well as Euler angles are non-commutative; that is, to get the correct orientation the rotations must be
-	// applied in the correct order which for this configuration is yaw, pitch, and then roll.
-	// For more see http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles which has additional links.
-	void CalcAngles()
-	{
-		yaw   = atan2(2.0f * (q[1] * q[2] + q[0] * q[3]), q[0] * q[0] + q[1] * q[1] - q[2] * q[2] - q[3] * q[3]);   
-		pitch = -asin(2.0f * (q[1] * q[3] - q[0] * q[2]));
-		roll  = atan2(2.0f * (q[0] * q[1] + q[2] * q[3]), q[0] * q[0] - q[1] * q[1] - q[2] * q[2] + q[3] * q[3]);
-		pitch *= 180.0f / M_PI;
-		yaw   *= 180.0f / M_PI; 
-		yaw   -= 3.58;
-		roll  *= 180.0f / M_PI;
-	}
+	/*
+	
 	
 	// Implementation of Sebastian Madgwick's "...efficient orientation filter for... inertial/magnetic sensor arrays"
 	// (see http://www.x-io.co.uk/category/open-source/ for examples and more details)
@@ -1113,7 +1109,7 @@ private:
 	}
 
 	
-	void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz)
+	void MahonyQuaternionUpdate(float AX, float AY, float AZ, float GX, float GY, float GZ, float MX, float MY, float MZ)
 	{
 		float q1 = q[0], q2 = q[1], q3 = q[2], q4 = q[3];   // short name local variable for readability
 		float norm;
@@ -1135,26 +1131,26 @@ private:
 		float q4q4 = q4 * q4;   
 
 		// Normalise accelerometer measurement
-		norm = sqrt(ax * ax + ay * ay + az * az);
+		norm = sqrt(AX * AX + AY * AY + AZ * AZ);
 		if (norm == 0.0f) return; // handle NaN
 		norm = 1.0f / norm;        // use reciprocal for division
-		ax *= norm;
-		ay *= norm;
-		az *= norm;
+		AX *= norm;
+		AY *= norm;
+		AZ *= norm;
 
 		// Normalise magnetometer measurement
-		norm = sqrt(mx * mx + my * my + mz * mz);
+		norm = sqrt(MX * MX + MY * MY + MZ * MZ);
 		if (norm == 0.0f) return; // handle NaN
 		norm = 1.0f / norm;        // use reciprocal for division
-		mx *= norm;
-		my *= norm;
-		mz *= norm;
+		MX *= norm;
+		MY *= norm;
+		MZ *= norm;
 
 		// Reference direction of Earth's magnetic field
-		hx = 2.0f * mx * (0.5f - q3q3 - q4q4) + 2.0f * my * (q2q3 - q1q4) + 2.0f * mz * (q2q4 + q1q3);
-		hy = 2.0f * mx * (q2q3 + q1q4) + 2.0f * my * (0.5f - q2q2 - q4q4) + 2.0f * mz * (q3q4 - q1q2);
+		hx = 2.0f * MX * (0.5f - q3q3 - q4q4) + 2.0f * MY * (q2q3 - q1q4) + 2.0f * MZ * (q2q4 + q1q3);
+		hy = 2.0f * MX * (q2q3 + q1q4) + 2.0f * MY * (0.5f - q2q2 - q4q4) + 2.0f * MZ * (q3q4 - q1q2);
 		bx = sqrt((hx * hx) + (hy * hy));
-		bz = 2.0f * mx * (q2q4 - q1q3) + 2.0f * my * (q3q4 + q1q2) + 2.0f * mz * (0.5f - q2q2 - q3q3);
+		bz = 2.0f * MX * (q2q4 - q1q3) + 2.0f * MY * (q3q4 + q1q2) + 2.0f * MZ * (0.5f - q2q2 - q3q3);
 
 		// Estimated direction of gravity and magnetic field
 		vx = 2.0f * (q2q4 - q1q3);
@@ -1165,9 +1161,9 @@ private:
 		wz = 2.0f * bx * (q1q3 + q2q4) + 2.0f * bz * (0.5f - q2q2 - q3q3);  
 
 		// Error is cross product between estimated direction and measured direction of gravity
-		ex = (ay * vz - az * vy) + (my * wz - mz * wy);
-		ey = (az * vx - ax * vz) + (mz * wx - mx * wz);
-		ez = (ax * vy - ay * vx) + (mx * wy - my * wx);
+		ex = (AY * vz - AZ * vy) + (MY * wz - MZ * wy);
+		ey = (AZ * vx - AX * vz) + (MZ * wx - MX * wz);
+		ez = (AX * vy - AY * vx) + (MX * wy - MY * wx);
 		if (Ki > 0.0f)
 		{
 			eInt[0] += ex;      // accumulate integral error
@@ -1182,18 +1178,18 @@ private:
 		}
 
 		// Apply feedback terms
-		gx = gx + Kp * ex + Ki * eInt[0];
-		gy = gy + Kp * ey + Ki * eInt[1];
-		gz = gz + Kp * ez + Ki * eInt[2];
+		GX = GX + Kp * ex + Ki * eInt[0];
+		GY = GY + Kp * ey + Ki * eInt[1];
+		GZ = GZ + Kp * ez + Ki * eInt[2];
 
 		// Integrate rate of change of quaternion
 		pa = q2;
 		pb = q3;
 		pc = q4;
-		q1 = q1 + (-q2 * gx - q3 * gy - q4 * gz) * (0.5f * deltat);
-		q2 = pa + (q1 * gx + pb * gz - pc * gy) * (0.5f * deltat);
-		q3 = pb + (q1 * gy - pa * gz + pc * gx) * (0.5f * deltat);
-		q4 = pc + (q1 * gz + pa * gy - pb * gx) * (0.5f * deltat);
+		q1 = q1 + (-q2 * GX - q3 * GY - q4 * GZ) * (0.5f * deltat);
+		q2 = pa + ( q1 * GX + pb * GZ - pc * GY) * (0.5f * deltat);
+		q3 = pb + ( q1 * GY - pa * GZ + pc * GX) * (0.5f * deltat);
+		q4 = pc + ( q1 * GZ + pa * GY - pb * GX) * (0.5f * deltat);
 
 		// Normalise quaternion
 		norm = sqrt(q1 * q1 + q2 * q2 + q3 * q3 + q4 * q4);
@@ -1204,7 +1200,209 @@ private:
 		q[3] = q4 * norm;
 
 	}
-		
+	
+	*/
+	
+	void MadgwickAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float delta) 
+	{
+		float recipNorm;
+		float s0, s1, s2, s3;
+		float qDot1, qDot2, qDot3, qDot4;
+		float hx, hy;
+		float _2q0mx, _2q0my, _2q0mz, _2q1mx, _2bx, _2bz, _4bx, _4bz, _2q0, _2q1, _2q2, _2q3, _2q0q2, _2q2q3, q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
+
+		// Use IMU algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation)
+		if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
+			MadgwickAHRSupdateIMU(gx, gy, gz, ax, ay, az, delta);
+			return;
+		}
+
+		// Rate of change of quaternion from gyroscope
+		qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
+		qDot2 = 0.5f * (q0 * gx + q2 * gz - q3 * gy);
+		qDot3 = 0.5f * (q0 * gy - q1 * gz + q3 * gx);
+		qDot4 = 0.5f * (q0 * gz + q1 * gy - q2 * gx);
+
+		// Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
+		if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
+
+			// Normalise accelerometer measurement
+			recipNorm = invSqrt(ax * ax + ay * ay + az * az);
+			ax *= recipNorm;
+			ay *= recipNorm;
+			az *= recipNorm;   
+
+			// Normalise magnetometer measurement
+			recipNorm = invSqrt(mx * mx + my * my + mz * mz);
+			mx *= recipNorm;
+			my *= recipNorm;
+			mz *= recipNorm;
+
+			// Auxiliary variables to avoid repeated arithmetic
+			_2q0mx = 2.0f * q0 * mx;
+			_2q0my = 2.0f * q0 * my;
+			_2q0mz = 2.0f * q0 * mz;
+			_2q1mx = 2.0f * q1 * mx;
+			_2q0 = 2.0f * q0;
+			_2q1 = 2.0f * q1;
+			_2q2 = 2.0f * q2;
+			_2q3 = 2.0f * q3;
+			_2q0q2 = 2.0f * q0 * q2;
+			_2q2q3 = 2.0f * q2 * q3;
+			q0q0 = q0 * q0;
+			q0q1 = q0 * q1;
+			q0q2 = q0 * q2;
+			q0q3 = q0 * q3;
+			q1q1 = q1 * q1;
+			q1q2 = q1 * q2;
+			q1q3 = q1 * q3;
+			q2q2 = q2 * q2;
+			q2q3 = q2 * q3;
+			q3q3 = q3 * q3;
+
+			// Reference direction of Earth's magnetic field
+			hx = mx * q0q0 - _2q0my * q3 + _2q0mz * q2 + mx * q1q1 + _2q1 * my * q2 + _2q1 * mz * q3 - mx * q2q2 - mx * q3q3;
+			hy = _2q0mx * q3 + my * q0q0 - _2q0mz * q1 + _2q1mx * q2 - my * q1q1 + my * q2q2 + _2q2 * mz * q3 - my * q3q3;
+			_2bx = sqrt(hx * hx + hy * hy);
+			_2bz = -_2q0mx * q2 + _2q0my * q1 + mz * q0q0 + _2q1mx * q3 - mz * q1q1 + _2q2 * my * q3 - mz * q2q2 + mz * q3q3;
+			_4bx = 2.0f * _2bx;
+			_4bz = 2.0f * _2bz;
+
+			// Gradient decent algorithm corrective step
+			s0 = -_2q2 * (2.0f * q1q3 - _2q0q2 - ax) + _2q1 * (2.0f * q0q1 + _2q2q3 - ay) - _2bz * q2 * (_2bx * (0.5f - q2q2 - q3q3) + _2bz * (q1q3 - q0q2) - mx) + (-_2bx * q3 + _2bz * q1) * (_2bx * (q1q2 - q0q3) + _2bz * (q0q1 + q2q3) - my) + _2bx * q2 * (_2bx * (q0q2 + q1q3) + _2bz * (0.5f - q1q1 - q2q2) - mz);
+			s1 = _2q3 * (2.0f * q1q3 - _2q0q2 - ax) + _2q0 * (2.0f * q0q1 + _2q2q3 - ay) - 4.0f * q1 * (1 - 2.0f * q1q1 - 2.0f * q2q2 - az) + _2bz * q3 * (_2bx * (0.5f - q2q2 - q3q3) + _2bz * (q1q3 - q0q2) - mx) + (_2bx * q2 + _2bz * q0) * (_2bx * (q1q2 - q0q3) + _2bz * (q0q1 + q2q3) - my) + (_2bx * q3 - _4bz * q1) * (_2bx * (q0q2 + q1q3) + _2bz * (0.5f - q1q1 - q2q2) - mz);
+			s2 = -_2q0 * (2.0f * q1q3 - _2q0q2 - ax) + _2q3 * (2.0f * q0q1 + _2q2q3 - ay) - 4.0f * q2 * (1 - 2.0f * q1q1 - 2.0f * q2q2 - az) + (-_4bx * q2 - _2bz * q0) * (_2bx * (0.5f - q2q2 - q3q3) + _2bz * (q1q3 - q0q2) - mx) + (_2bx * q1 + _2bz * q3) * (_2bx * (q1q2 - q0q3) + _2bz * (q0q1 + q2q3) - my) + (_2bx * q0 - _4bz * q2) * (_2bx * (q0q2 + q1q3) + _2bz * (0.5f - q1q1 - q2q2) - mz);
+			s3 = _2q1 * (2.0f * q1q3 - _2q0q2 - ax) + _2q2 * (2.0f * q0q1 + _2q2q3 - ay) + (-_4bx * q3 + _2bz * q1) * (_2bx * (0.5f - q2q2 - q3q3) + _2bz * (q1q3 - q0q2) - mx) + (-_2bx * q0 + _2bz * q2) * (_2bx * (q1q2 - q0q3) + _2bz * (q0q1 + q2q3) - my) + _2bx * q1 * (_2bx * (q0q2 + q1q3) + _2bz * (0.5f - q1q1 - q2q2) - mz);
+			recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3); // normalise step magnitude
+			s0 *= recipNorm;
+			s1 *= recipNorm;
+			s2 *= recipNorm;
+			s3 *= recipNorm;
+
+			// Apply feedback step
+			qDot1 -= beta * s0;
+			qDot2 -= beta * s1;
+			qDot3 -= beta * s2;
+			qDot4 -= beta * s3;
+		}
+
+		// Integrate rate of change of quaternion to yield quaternion
+		q0 += qDot1 * delta; //(1.0f / sampleFreq);
+		q1 += qDot2 * delta; //(1.0f / sampleFreq);
+		q2 += qDot3 * delta; //(1.0f / sampleFreq);
+		q3 += qDot4 * delta; //(1.0f / sampleFreq);
+
+		// Normalise quaternion
+		recipNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+		q0 *= recipNorm;
+		q1 *= recipNorm;
+		q2 *= recipNorm;
+		q3 *= recipNorm;
+	}
+
+	//---------------------------------------------------------------------------------------------------
+	// IMU algorithm update
+
+	void MadgwickAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az, float delta) 
+	{
+		float recipNorm;
+		float s0, s1, s2, s3;
+		float qDot1, qDot2, qDot3, qDot4;
+		float _2q0, _2q1, _2q2, _2q3, _4q0, _4q1, _4q2 ,_8q1, _8q2, q0q0, q1q1, q2q2, q3q3;
+
+		// Rate of change of quaternion from gyroscope
+		qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
+		qDot2 = 0.5f * (q0 * gx + q2 * gz - q3 * gy);
+		qDot3 = 0.5f * (q0 * gy - q1 * gz + q3 * gx);
+		qDot4 = 0.5f * (q0 * gz + q1 * gy - q2 * gx);
+
+		// Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
+		if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
+
+			// Normalise accelerometer measurement
+			recipNorm = invSqrt(ax * ax + ay * ay + az * az);
+			ax *= recipNorm;
+			ay *= recipNorm;
+			az *= recipNorm;   
+
+			// Auxiliary variables to avoid repeated arithmetic
+			_2q0 = 2.0f * q0;
+			_2q1 = 2.0f * q1;
+			_2q2 = 2.0f * q2;
+			_2q3 = 2.0f * q3;
+			_4q0 = 4.0f * q0;
+			_4q1 = 4.0f * q1;
+			_4q2 = 4.0f * q2;
+			_8q1 = 8.0f * q1;
+			_8q2 = 8.0f * q2;
+			q0q0 = q0 * q0;
+			q1q1 = q1 * q1;
+			q2q2 = q2 * q2;
+			q3q3 = q3 * q3;
+
+			// Gradient decent algorithm corrective step
+			s0 = _4q0 * q2q2 + _2q2 * ax + _4q0 * q1q1 - _2q1 * ay;
+			s1 = _4q1 * q3q3 - _2q3 * ax + 4.0f * q0q0 * q1 - _2q0 * ay - _4q1 + _8q1 * q1q1 + _8q1 * q2q2 + _4q1 * az;
+			s2 = 4.0f * q0q0 * q2 + _2q0 * ax + _4q2 * q3q3 - _2q3 * ay - _4q2 + _8q2 * q1q1 + _8q2 * q2q2 + _4q2 * az;
+			s3 = 4.0f * q1q1 * q3 - _2q1 * ax + 4.0f * q2q2 * q3 - _2q2 * ay;
+			recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3); // normalise step magnitude
+			s0 *= recipNorm;
+			s1 *= recipNorm;
+			s2 *= recipNorm;
+			s3 *= recipNorm;
+
+			// Apply feedback step
+			qDot1 -= beta * s0;
+			qDot2 -= beta * s1;
+			qDot3 -= beta * s2;
+			qDot4 -= beta * s3;
+		}
+
+		// Integrate rate of change of quaternion to yield quaternion
+		q0 += qDot1 * delta; //(1.0f / sampleFreq);
+		q1 += qDot2 * delta; //(1.0f / sampleFreq);
+		q2 += qDot3 * delta; //(1.0f / sampleFreq);
+		q3 += qDot4 * delta; //(1.0f / sampleFreq);
+
+		// Normalise quaternion
+		recipNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+		q0 *= recipNorm;
+		q1 *= recipNorm;
+		q2 *= recipNorm;
+		q3 *= recipNorm;
+	}
+
+	float invSqrt(float x) //x-io
+	{
+		float halfx = 0.5f * x;
+		float y = x;
+		long i = *(long*)&y;
+		i = 0x5f3759df - (i>>1);
+		y = *(float*)&i;
+		y = y * (1.5f - (halfx * y * y));
+		return y;
+	}
+	
+	// Define output variables from updated quaternion---these are Tait-Bryan angles, commonly used in aircraft orientation.
+	// In this coordinate system, the positive z-axis is down toward Earth. 
+	// Yaw is the angle between Sensor x-axis and Earth magnetic North (or true North if corrected for local declination), 
+	// looking down on the sensor positive yaw is counterclockwise.
+	// Pitch is angle between sensor x-axis and Earth ground plane, toward the Earth is positive, up toward the sky is negative.
+	// Roll is angle between sensor y-axis and Earth ground plane, y-axis up is positive roll.
+	// These arise from the definition of the homogeneous rotation matrix constructed from quaternions.
+	// Tait-Bryan angles as well as Euler angles are non-commutative; that is, to get the correct orientation the rotations must be
+	// applied in the correct order which for this configuration is yaw, pitch, and then roll.
+	// For more see http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles which has additional links.
+	void CalcAngles(float q0, float q1, float q2, float q3, float declination)
+	{
+		yaw   = atan2(2.0f * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3);   
+		pitch = -asin(2.0f * (q1 * q3 - q0 * q2));
+		roll  = atan2(2.0f * (q0 * q1 + q2 * q3), q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3);
+		pitch *= 180.0f / M_PI;
+		yaw   *= 180.0f / M_PI; 
+		yaw   -= declination;
+		roll  *= 180.0f / M_PI;
+	}
 
 };
 

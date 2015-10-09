@@ -29,7 +29,7 @@
 #include <thread>
 #include <cmath>
 #include <inttypes.h>
-
+#include <signal.h>
 #include "drivers/LSM9DS0.h"
 #include "drivers/ADS1015.h"
 #include "oscpack/osc/OscOutboundPacketStream.h"
@@ -41,10 +41,10 @@ using namespace std;
 
 volatile uint16_t pulse_bang 	= 0;
 volatile uint16_t pulse_bpm 	= 0;
-volatile uint16_t pulse_value 	= 0;
-volatile uint16_t gsr_value 	= 0;
-volatile uint16_t rst_value 	= 0;
-		
+volatile float pulse_value_f 	= 0;
+volatile float gsr_value_f 		= 0;
+volatile float rst_value_f 		= 0;
+volatile float battery_level	= 3.2;
 const char* OSC_ADDRESS 		= "127.0.0.1";				//target IP
 int OSC_PORT 					= 4444;						//target port
 float sampleFreq				= 100.0f;					//sample frequency in Hz
@@ -58,7 +58,15 @@ float elapsed_secs 				= 0;
 int counter 					= 0;
 LSM9DS0 						*imu;
 mraa::I2c						*adc_i2c;
-  
+bool shouldRun					= true;
+
+// Define the function to be called when ctrl-c (SIGINT) signal is sent to process
+void signal_callback_handler(int signum)
+{
+	printf("Terminating...\n");
+	shouldRun = false;
+}
+
 void showhelp()
 {
 	printf("Options:\n");
@@ -126,6 +134,9 @@ const char* osc_addr(string basename, const char* subaddr)
  ******************************************************************************************************************/
 int main(int argc, char *argv[])
 {
+	// Register signal and signal handler
+	signal(SIGINT, signal_callback_handler);
+	   
  /**********************************************************************************************************
  * SOMAPHONE :: Initializing
  **********************************************************************************************************/
@@ -137,6 +148,7 @@ int main(int argc, char *argv[])
 //Parse & process command line arguments
 	process_args(argc, argv); // --osc 192.168.0.5 --port 4444 --hz 60 
 	
+	sleep(10); //???
 //Init 9DOF
 	imu = new LSM9DS0(0x6B, 0x1D);
 	uint16_t imuResult = imu->begin(LSM9DS0::gyro_scale::G_SCALE_245DPS, 
@@ -162,9 +174,10 @@ int main(int argc, char *argv[])
 	// The default setting is _2_048V.
 	// NB!!! Just because FS reading is > 3.3V doesn't mean you can take an
 	//  input above 3.3V! Keep your input voltages below 3.3V to avoid damage!
-	adc.setRange(0, _2_048V); //_2_048V or _4_096V
-	adc.setRange(1, _2_048V); //_1_024V or _0_512V
-	adc.setRange(2, _2_048V); //_4_096V
+	adc.setRange(0, _2_048V); //_2_048V or _4_096V 	<-- heart rate sensor
+	adc.setRange(1, _2_048V); //_1_024V or _0_512V	<-- GSR sensor
+	adc.setRange(2, _2_048V); //_4_096V				<-- btn1
+	//adc.setRange(3, _4_096V); //_4_096V			<-- battery level
 
 //Init OSC
 	UdpTransmitSocket transmitSocket( IpEndpointName( OSC_ADDRESS, OSC_PORT ) );
@@ -177,7 +190,7 @@ int main(int argc, char *argv[])
 /**********************************************************************************************************
  * SOMAPHONE :: MAIN LOOP
  **********************************************************************************************************/
-	for (;;) {
+	while (shouldRun) {
 
 		//start timing
 		startTime = clock();
@@ -185,66 +198,69 @@ int main(int argc, char *argv[])
 		counter++;
 		
 		//read 9DOF sensors
-		imu->Read();
+		imu->Read(sampleFreq);
 		
 		//read ADC
-		float pulse_value_f = adc.getRawResult(0);
-		float gsr_value_f = adc.getRawResult(1);
-		rst_value = adc.getRawResult(2);
+		pulse_value_f = adc.getResult(0);
+		gsr_value_f = adc.getResult(1);
+		rst_value_f = adc.getResult(2);
+		//if((counter % 10) == 0) 
+		battery_level = adc.getResult(3); //each 10sec 
 		
 		//construct the OSC bundle
 		p << osc::BeginBundleImmediate
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "info") ) //use name
 					<< 1			//ID
-					<< elapsed_secs	//read&process time
-					<< counter		//tick counter
-					<< rst_value	//RESET
-					<< imu->overflow		//gyro, acc, mag data overflow
+					<< (float)elapsed_secs	//read&process time
+					<< (int)counter		//tick counter
+					<< (float)rst_value_f	//RESET
+					<< (float)imu->deltat
+					<< (int)imu->overflow		//gyro, acc, mag data overflow
 				<< osc::EndMessage
 
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "gsr" ) )
-					<< gsr_value_f	//Galvanic Skin Response
+					<< (float) gsr_value_f	//Galvanic Skin Response
 				<< osc::EndMessage
 
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "pulse" ) )
-					<< pulse_value_f	//Heart raw data
-					<< pulse_bang	//Heart Pulse Bang
-					<< pulse_bpm	//estimation of the heart rate in BPM
+					<< (float) pulse_value_f	//Heart raw data
+					<< (int)pulse_bang	//Heart Pulse Bang
+					<< (float)pulse_bpm	//estimation of the heart rate in BPM
 				<< osc::EndMessage
 
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "gyro" ) )
-					<< imu->_gx
-					<< imu->_gy
-					<< imu->_gz
+					<< (float)imu->gx_f
+					<< (float)imu->gy_f
+					<< (float)imu->gz_f
 					
 				<< osc::EndMessage
 				
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "acc" ) )
-					<< imu->_ax
-					<< imu->_ay
-					<< imu->_az
+					<< (float)imu->ax_f
+					<< (float)imu->ay_f
+					<< (float)imu->az_f
 					
 				<< osc::EndMessage
 				
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "mag" ) )
-					<< imu->_mx
-					<< imu->_my
-					<< imu->_mz
+					<< (float)imu->mx_f
+					<< (float)imu->my_f
+					<< (float)imu->mz_f
 					
 				<< osc::EndMessage
 				
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "orientation" ) )
-					<< imu->pitch
-					<< imu->yaw
-					<< imu->roll
+					<< (float)imu->pitch
+					<< (float)imu->yaw
+					<< (float)imu->roll
 					
 				<< osc::EndMessage
 				
 				<< osc::BeginMessage( osc_addr (base_osc_addr, "quaternion" ) )
-					<< imu->q[0]
-					<< imu->q[1]
-					<< imu->q[2]
-					<< imu->q[3]
+					<< (float)imu->q0
+					<< (float)imu->q1
+					<< (float)imu->q2
+					<< (float)imu->q3
 				<< osc::EndMessage
 				
 		 << osc::EndBundle;
@@ -252,17 +268,16 @@ int main(int argc, char *argv[])
 		//send the OSC bundle
 		transmitSocket.Send( p.Data(), p.Size() );
 		
-		//clear the OSC bundle
-		p.Clear();
-		 
 		//clock the processing time and subtract it from the cycle period or better use a timer?
 		clock_t endTime = clock();
 		elapsed_secs = float(endTime - startTime) / CLOCKS_PER_SEC;
 		int elapsed_usecs = (int)elapsed_secs*1000000;
 
 		//wait until the next cycle
-		usleep( ( (int) 1000000 / sampleFreq) - elapsed_usecs);
-		 
+		usleep( ( (int) 1000000 / sampleFreq)); //- elapsed_usecs
+		
+		//clear the OSC bundle
+		p.Clear();
 	}
 
 	return MRAA_SUCCESS;
