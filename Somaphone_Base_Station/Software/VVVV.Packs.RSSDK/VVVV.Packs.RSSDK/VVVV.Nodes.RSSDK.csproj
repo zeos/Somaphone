@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\VVVV.SlimDX.1.0.1\build\net40\VVVV.SlimDX.props" Condition="Exists('..\packages\VVVV.SlimDX.1.0.1\build\net40\VVVV.SlimDX.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{91C4C402-96D5-488B-89A1-DB04277BECDE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VVVV.Nodes.RSSDK</RootNamespace>
+    <AssemblyName>VVVV.Nodes.RSSDK</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <ReferencePath>C:\VVVV\vvvv_45beta33.7_x86\packs\VVVV.Packs.RSSDK\VVVV.Packs.RSSDK\packages\</ReferencePath>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <SourceAnalysisOverrideSettingsFile>C:\Users\Intel\AppData\Roaming\ICSharpCode\SharpDevelop5\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <TargetFrameworkProfile />
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <DebugType>Full</DebugType>
+    <WarningLevel>4</WarningLevel>
+    <OutputPath>..\nodes\plugins\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>x64</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FeralTic">
+      <HintPath>..\..\dx11\core\FeralTic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="libpxcclr.cs">
+      <HintPath>..\dependencies\libpxcclr.cs.dll</HintPath>
+    </Reference>
+    <Reference Include="SlimDX">
+      <HintPath>..\..\..\lib\core\SlimDX.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition.CodePlex">
+      <HintPath>..\..\..\lib\core\System.ComponentModel.Composition.CodePlex.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="VVVV.Core">
+      <HintPath>..\..\..\lib\core\VVVV.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.DX11.Core">
+      <HintPath>..\..\dx11\core\VVVV.DX11.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.DX11.Lib">
+      <HintPath>..\..\dx11\core\VVVV.DX11.Lib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.Hosting">
+      <HintPath>..\..\..\lib\core\VVVV.Hosting.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.Nodes.Generic">
+      <HintPath>..\..\..\lib\core\VVVV.Nodes.Generic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.PluginInterfaces">
+      <HintPath>..\..\..\lib\core\VVVV.PluginInterfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.Utils">
+      <HintPath>..\..\..\lib\core\VVVV.Utils.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.Utils3rdParty">
+      <HintPath>..\..\..\lib\core\VVVV.Utils3rdParty.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VVVV.UtilsIL">
+      <HintPath>..\..\..\lib\core\VVVV.UtilsIL.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Context.cs" />
+    <Compile Include="src\ListDevices.cs" />
+    <Compile Include="src\Modules\blob.cs" />
+    <Compile Include="src\Modules\Face.cs" />
+    <Compile Include="src\Modules\FaceConfig.cs" />
+    <Compile Include="src\Modules\Hand.cs" />
+    <Compile Include="src\Utils\GetImageBytes.cs" />
+    <Compile Include="src\Utils\StreamUtils.cs" />
+    <Compile Include="src\Utils\VectorConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src" />
+    <Folder Include="src\Modules" />
+    <Folder Include="src\Utils" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\VVVV.SlimDX.1.0.1\build\net40\VVVV.SlimDX.targets" Condition="Exists('..\packages\VVVV.SlimDX.1.0.1\build\net40\VVVV.SlimDX.targets')" />
+  <Import Project="..\packages\VVVV.PluginInterfaces.33.7.0\build\net40\VVVV.PluginInterfaces.targets" Condition="Exists('..\packages\VVVV.PluginInterfaces.33.7.0\build\net40\VVVV.PluginInterfaces.targets')" />
+  <Import Project="..\packages\VVVV.Utils3rdParty.33.7.0\build\net40\VVVV.Utils3rdParty.targets" Condition="Exists('..\packages\VVVV.Utils3rdParty.33.7.0\build\net40\VVVV.Utils3rdParty.targets')" />
+  <Import Project="..\packages\VVVV.Hosting.33.7.0\build\net40\VVVV.Hosting.targets" Condition="Exists('..\packages\VVVV.Hosting.33.7.0\build\net40\VVVV.Hosting.targets')" />
+  <Import Project="..\packages\VVVV.Nodes.Generic.33.7.0\build\net40\VVVV.Nodes.Generic.targets" Condition="Exists('..\packages\VVVV.Nodes.Generic.33.7.0\build\net40\VVVV.Nodes.Generic.targets')" />
+  <Import Project="packages\VVVV.PluginInterfaces.33.7.0\build\net40\VVVV.PluginInterfaces.targets" Condition="Exists('packages\VVVV.PluginInterfaces.33.7.0\build\net40\VVVV.PluginInterfaces.targets')" />
+  <Import Project="packages\VVVV.Utils3rdParty.33.7.0\build\net40\VVVV.Utils3rdParty.targets" Condition="Exists('packages\VVVV.Utils3rdParty.33.7.0\build\net40\VVVV.Utils3rdParty.targets')" />
+  <Import Project="packages\VVVV.Hosting.33.7.0\build\net40\VVVV.Hosting.targets" Condition="Exists('packages\VVVV.Hosting.33.7.0\build\net40\VVVV.Hosting.targets')" />
+  <Import Project="packages\VVVV.Nodes.Generic.33.7.0\build\net40\VVVV.Nodes.Generic.targets" Condition="Exists('packages\VVVV.Nodes.Generic.33.7.0\build\net40\VVVV.Nodes.Generic.targets')" />
+  <Import Project="packages\VVVV.FeralTic.1.0.1\build\net40\VVVV.FeralTic.targets" Condition="Exists('packages\VVVV.FeralTic.1.0.1\build\net40\VVVV.FeralTic.targets')" />
+  <Import Project="packages\VVVV.DX11.Core.32.1.1\build\net40\VVVV.DX11.Core.targets" Condition="Exists('packages\VVVV.DX11.Core.32.1.1\build\net40\VVVV.DX11.Core.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,7 @@
+FeralTic.dll
+libpxcclr.cs.dll
+libpxccpp2c.dll
+libpxccpp2c.dll.signature
+libpxclog.dll
+VVVV.DX11.Core.dll
+VVVV.DX11.Lib.dll

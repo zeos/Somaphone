@@ -1,0 +1,1 @@
+C:\VVVV\vvvv_45beta33.7_x86\plugins\LiveTrack\obj\Debug\LiveTrack.csprojResolveAssemblyReference.cache

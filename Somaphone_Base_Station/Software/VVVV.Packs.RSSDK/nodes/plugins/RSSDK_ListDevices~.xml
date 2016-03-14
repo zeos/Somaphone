@@ -1,0 +1,1141 @@
+<!DOCTYPE PATCH  SYSTEM "http://vvvv.org/versions/vvvv45beta33.7.dtd" >
+   <PATCH nodename="C:\VVVV\vvvv_45beta33.7_x86\packs\VVVV.Packs.RSSDK\nodes\plugins\RSSDK_ListDevices.v4p" scrollx="30" scrolly="7455" systemname="RSSDK_ListDevices" filename="C:\VVVV\vvvv_45beta33.7_x86\RSSDK_ListDevices.v4p">
+   <BOUNDS type="Window" left="1560" top="375" width="16410" height="13545">
+   </BOUNDS>
+   <NODE systemname="ListDevices (RSSDK)" filename="%VVVV%\packs\VVVV.Packs.RSSDK\nodes\plugins\VVVV.Nodes.RSSDK.dll" nodename="ListDevices (RSSDK)" componentmode="Hidden" id="2">
+   <BOUNDS type="Node" left="1980" top="2235" width="7830" height="270">
+   </BOUNDS>
+   <PIN pinname="DeviceName" visible="1">
+   </PIN>
+   <PIN pinname="Refresh" visible="1" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="DeviceInfo" visible="1">
+   </PIN>
+   <PIN pinname="ModuleInfo" visible="1">
+   </PIN>
+   <PIN pinname="ModuleIUID" visible="1">
+   </PIN>
+   <PIN pinname="Module IUID" visible="1">
+   </PIN>
+   <PIN pinname="Module Description" visible="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="1" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="1995" top="2895" width="2475" height="645">
+   </BOUNDS>
+   <BOUNDS type="Node" left="1995" top="2895" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="DeviceName">
+   </PIN>
+   <PIN pinname="Rows" slicecount="1" values="3">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="2" srcpinname="DeviceName" dstnodeid="1" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="0" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="1995" top="855" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="1995" top="855" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Bang">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Refresh">
+   </PIN>
+   <PIN pinname="Y Output Value" visible="1">
+   </PIN>
+   </NODE>
+   <PACK Name="VVVV" Version="0.2.0">
+   </PACK>
+   <PACK Name="addonpack" Version="33.7.0">
+   </PACK>
+   <NODE systemname="DeviceInfo (RSSDK)" filename="%VVVV%\packs\VVVV.Packs.RSSDK\nodes\plugins\VVVV.Nodes.RSSDK.dll" nodename="DeviceInfo (RSSDK)" componentmode="Hidden" id="4">
+   <BOUNDS type="Node" left="4575" top="6510" width="10590" height="270">
+   </BOUNDS>
+   <PIN pinname="DeviceInfo" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="ID" visible="1">
+   </PIN>
+   <PIN pinname="Index" visible="1">
+   </PIN>
+   <PIN pinname="UID" visible="1">
+   </PIN>
+   <PIN pinname="Firmware" visible="1">
+   </PIN>
+   <PIN pinname="LocationXY" visible="1">
+   </PIN>
+   <PIN pinname="Model" visible="1">
+   </PIN>
+   <PIN pinname="Name" visible="1">
+   </PIN>
+   <PIN pinname="Orientation" visible="1">
+   </PIN>
+   <PIN pinname="Serial" visible="1">
+   </PIN>
+   <PIN pinname="Streams" visible="1">
+   </PIN>
+   <PIN pinname="Streams Bin Size" visible="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="5" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="4575" top="7680" width="5430" height="285">
+   </BOUNDS>
+   <BOUNDS type="Node" left="4575" top="7680" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="ID">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="ID" dstnodeid="5" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="6" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="5640" top="7005" width="360" height="255">
+   </BOUNDS>
+   <BOUNDS type="Node" left="5640" top="7005" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Index">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Index" dstnodeid="6" dstpinname="Y Input Value">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="7" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="6675" top="7035" width="1065" height="285">
+   </BOUNDS>
+   <BOUNDS type="Node" left="6675" top="7035" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="UID">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="UID" dstnodeid="7" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="8" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="7755" top="7050" width="795" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="7755" top="7050" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Firmware">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Firmware" dstnodeid="8" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="9" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="8775" top="7020" width="795" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="8775" top="7020" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Vector Size" slicecount="1" values="2">
+   </PIN>
+   <PIN pinname="Rows" slicecount="1" values="2">
+   </PIN>
+   <PIN pinname="Y Input Value" slicecount="2" values="0,0">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="LocationXY">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="LocationXY" dstnodeid="9" dstpinname="Y Input Value">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="10" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="9840" top="7020" width="1755" height="315">
+   </BOUNDS>
+   <BOUNDS type="Node" left="9840" top="7020" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Model">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Model" dstnodeid="10" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="11" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="10875" top="8010" width="3015" height="420">
+   </BOUNDS>
+   <BOUNDS type="Node" left="10875" top="8010" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Name">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Name" dstnodeid="11" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="12" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="11925" top="7395" width="2850" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="11925" top="7395" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Orientation">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Orientation" dstnodeid="12" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="13" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="12990" top="6900" width="1215" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="12990" top="6900" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Serial">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Serial" dstnodeid="13" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="14" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="14100" top="7905" width="1605" height="810">
+   </BOUNDS>
+   <BOUNDS type="Node" left="14100" top="7905" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Streams">
+   </PIN>
+   <PIN pinname="Rows" slicecount="1" values="3">
+   </PIN>
+   <PIN pinname="Show SliceIndex" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Show Grid" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Streams" dstnodeid="14" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="15" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="15105" top="6945" width="795" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="15105" top="6945" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="|Streams Bin Size|">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="Streams Bin Size" dstnodeid="15" dstpinname="Y Input Value">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="16" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="9765" top="2655" width="4860" height="3195">
+   </BOUNDS>
+   <BOUNDS type="Node" left="9765" top="2655" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="ModuleInfo">
+   </PIN>
+   <PIN pinname="SliceCount Mode" slicecount="1" values="ColsRowsPages">
+   </PIN>
+   <PIN pinname="Show Grid" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Rows" slicecount="1" values="16">
+   </PIN>
+   <PIN pinname="Columns" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Input String" visible="1" slicecount="16" values=",,,,,,,,,,,,,,,">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="18" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="8025" top="12780" width="5415" height="7860">
+   </BOUNDS>
+   <BOUNDS type="Node" left="8025" top="12780" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Status">
+   </PIN>
+   <PIN pinname="Input String" slicecount="1" values="|RSSDK: Configuring...&lf;&cr;RSSDK: Device created&lf;&cr;Enabled stream type DEPTH 640x480@60&lf;&cr;Initialized|">
+   </PIN>
+   <PIN pinname="String Type" slicecount="1" values="MultiLine">
+   </PIN>
+   <PIN pinname="Show Grid" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="19" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="11115" top="10185" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="11115" top="10185" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Enabled">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <NODE systemname="Renderer (TTY)" nodename="Renderer (TTY)" componentmode="InAWindow" id="20" stayontop="1">
+   <BOUNDS type="Node" left="5220" top="12585" width="100" height="100">
+   </BOUNDS>
+   <BOUNDS type="Box" left="5220" top="12585" width="2400" height="1800">
+   </BOUNDS>
+   <BOUNDS type="Window" left="15645" top="7065" width="14925" height="6930">
+   </BOUNDS>
+   <PIN pinname="Log Messages" visible="1">
+   </PIN>
+   <PIN pinname="Clear" visible="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="21" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="6120" top="11805" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="6120" top="11805" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="|Log Messages|">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="21" srcpinname="Y Output Value" dstnodeid="20" dstpinname="Log Messages">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="22" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="5400" top="11805" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="5400" top="11805" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Bang">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Clear">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="22" srcpinname="Y Output Value" dstnodeid="20" dstpinname="Clear">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="23" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="7170" top="2700" width="1035" height="3375">
+   </BOUNDS>
+   <BOUNDS type="Node" left="7170" top="2700" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Rows" slicecount="1" values="16">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="ModuleIUID">
+   </PIN>
+   <PIN pinname="Show Grid" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Y Input Value" visible="1" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="2" srcpinname="Module IUID" dstnodeid="23" dstpinname="Y Input Value">
+   </LINK>
+   <LINK srcnodeid="2" srcpinname="Module Description" dstnodeid="16" dstpinname="Input String">
+   </LINK>
+   <LINK srcnodeid="2" srcpinname="DeviceInfo" dstnodeid="4" dstpinname="DeviceInfo">
+   </LINK>
+   <NODE systemname="GetSlice (Node)" nodename="GetSlice (Node)" componentmode="Hidden" id="25">
+   <BOUNDS type="Node" left="435" top="10275" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Input Node" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Output Node" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="2" srcpinname="DeviceInfo" dstnodeid="25" dstpinname="Input Node" linkstyle="VHV">
+   <LINKPOINT x="4290" y="6390">
+   </LINKPOINT>
+   <LINKPOINT x="465" y="6390">
+   </LINKPOINT>
+   </LINK>
+   <NODE systemname="OnOpen (VVVV)" nodename="OnOpen (VVVV)" componentmode="Hidden" id="36">
+   <BOUNDS type="Node" left="1980" top="1725" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Simulate" visible="1" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Bang" visible="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="42" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="1530" top="10155" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="1530" top="10155" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Mirror">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="43" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="2580" top="10155" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="2580" top="10155" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="|Sync Streams|">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="0" srcpinname="Y Output Value" dstnodeid="36" dstpinname="Simulate">
+   </LINK>
+   <LINK srcnodeid="36" srcpinname="Bang" dstnodeid="2" dstpinname="Refresh">
+   </LINK>
+   <NODE systemname="MainLoop (VVVV)" nodename="MainLoop (VVVV)" componentmode="Hidden" id="-6">
+   <BOUNDS type="Node" left="7170" top="1125" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Maximum forground fps" visible="1">
+   </PIN>
+   <PIN pinname="Maximum background fpsS" visible="1">
+   </PIN>
+   <PIN pinname="Time Mode" slicecount="1" values="Raw">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="50" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="7155" top="465" width="795" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="7155" top="465" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="120">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Y Output Value" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="50" srcpinname="Y Output Value" dstnodeid="-6" dstpinname="Maximum forground fps">
+   </LINK>
+   <LINK srcnodeid="50" srcpinname="Y Output Value" dstnodeid="-6" dstpinname="Maximum background fpsS">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="51" systemname="IOBox (String)">
+   <BOUNDS type="Node" left="285" top="180" width="735" height="270">
+   </BOUNDS>
+   <BOUNDS type="Box" left="285" top="180" width="735" height="270">
+   </BOUNDS>
+   <PIN pinname="Input String" visible="0" slicecount="1" values="|--- zeos|">
+   </PIN>
+   <PIN pinname="Output String" visible="0">
+   </PIN>
+   <PIN pinname="Show Grid" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="String Type" slicecount="1" values="MultiLine">
+   </PIN>
+   </NODE>
+   <NODE systemname="Timing (Debug)" nodename="Timing (Debug)" componentmode="Hidden" id="52">
+   <BOUNDS type="Node" left="8580" top="525" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="frames per second" visible="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="53" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="8565" top="1170" width="795" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="8565" top="1170" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="52" srcpinname="frames per second" dstnodeid="53" dstpinname="Y Input Value">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="54" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="11145" top="11340" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="11145" top="11340" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Connected">
+   </PIN>
+   <PIN pinname="Y Input Value" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <NODE systemname="FullscreenQuad (DX11.Layer)" filename="%VVVV%\packs\dx11\nodes\modules\FullscreenQuad (DX11.Layer).v4p" nodename="FullscreenQuad (DX11.Layer)" componentmode="Hidden" id="57">
+   <BOUNDS type="Node" left="360" top="14490" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Texture" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Layer" visible="1">
+   </PIN>
+   <PIN pinname="Enabled" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <NODE systemname="Renderer (DX11)" filename="%VVVV%\packs\dx11\nodes\plugins\VVVV.DX11.Nodes.dll" nodename="Renderer (DX11)" componentmode="InAWindow" id="58" stayontop="1">
+   <BOUNDS type="Node" left="195" top="14985" width="100" height="100">
+   </BOUNDS>
+   <BOUNDS type="Box" left="195" top="14985" width="6000" height="4500">
+   </BOUNDS>
+   <BOUNDS type="Window" left="15750" top="645" width="9045" height="6270">
+   </BOUNDS>
+   <PIN pinname="Layers" visible="1">
+   </PIN>
+   <PIN pinname="Texture Out" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="57" srcpinname="Layer" dstnodeid="58" dstpinname="Layers">
+   </LINK>
+   <NODE systemname="Enum2String (Enumerations)" nodename="Enum2String (Enumerations)" componentmode="Hidden" id="61">
+   <BOUNDS type="Node" left="2085" top="13605" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Enum" visible="1" slicecount="1" values="R16_UNorm">
+   </PIN>
+   <PIN pinname="String Value" visible="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="62" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="2070" top="14010" width="1575" height="330">
+   </BOUNDS>
+   <BOUNDS type="Node" left="2070" top="14010" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="String Type" slicecount="1" values="MultiLine">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="61" srcpinname="String Value" dstnodeid="62" dstpinname="Input String">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="63" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="4170" top="13245" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="4170" top="13245" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Valid">
+   </PIN>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="64" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="6855" top="10185" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="6855" top="10185" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="|Enable Face|">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="65" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="7935" top="10185" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="7935" top="10185" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="|Enable Blob|">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="66" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="9000" top="10185" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="9000" top="10185" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="|Enable Hand|">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="67" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="10065" top="10185" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="10065" top="10185" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="|Enable 3DSeg|">
+   </PIN>
+   </NODE>
+   <NODE systemname="AsTexture (DX11.Texture RSSDK)" filename="%VVVV%\packs\VVVV.Packs.RSSDK\nodes\plugins\VVVV.Nodes.RSSDK.dll" nodename="AsTexture (DX11.Texture RSSDK)" componentmode="Hidden" id="56">
+   <BOUNDS type="Node" left="465" top="13035" width="3345" height="270">
+   </BOUNDS>
+   <PIN pinname="Input" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Texture Out" visible="1">
+   </PIN>
+   <PIN pinname="Apply" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="Texture Format" visible="1">
+   </PIN>
+   <PIN pinname="Is Valid" visible="1">
+   </PIN>
+   <PIN pinname="Valid" visible="1">
+   </PIN>
+   <PIN pinname="Format" slicecount="1" visible="1" values="Unknown">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Enumerations)" componentmode="InABox" id="71" systemname="IOBox (Enumerations)">
+   <BOUNDS type="Box" left="3645" top="8355" width="1785" height="285">
+   </BOUNDS>
+   <BOUNDS type="Node" left="3645" top="8355" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Input Enum" slicecount="1" visible="1" values="|RGB32 960x540@60|">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Color">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Enumerations)" componentmode="InABox" id="72" systemname="IOBox (Enumerations)">
+   <BOUNDS type="Box" left="4725" top="8955" width="1200" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="4725" top="8955" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Input Enum" slicecount="1" visible="1" values="|DEPTH 640x480@60|">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Depth">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (Enumerations)" componentmode="InABox" id="73" systemname="IOBox (Enumerations)">
+   <BOUNDS type="Box" left="5805" top="9420" width="1440" height="255">
+   </BOUNDS>
+   <BOUNDS type="Node" left="5805" top="9420" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Input Enum" slicecount="1" visible="1" values="|Y8 640x480@60|">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="IR">
+   </PIN>
+   </NODE>
+   <NODE systemname="Info (DX11.Texture 2d)" filename="%VVVV%\packs\dx11\nodes\plugins\VVVV.DX11.Nodes.dll" nodename="Info (DX11.Texture 2d)" componentmode="Hidden" id="78">
+   <BOUNDS type="Node" left="780" top="16065" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Texture In" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Format" visible="1">
+   </PIN>
+   </NODE>
+   <NODE systemname="Enum2String (Enumerations)" nodename="Enum2String (Enumerations)" componentmode="Hidden" id="81">
+   <BOUNDS type="Node" left="1140" top="16695" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Enum" visible="1" slicecount="1" values="R16_UNorm">
+   </PIN>
+   <PIN pinname="String Value" visible="1">
+   </PIN>
+   </NODE>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="80" systemname="IOBox (String)">
+   <BOUNDS type="Box" left="1125" top="17385" width="1575" height="330">
+   </BOUNDS>
+   <BOUNDS type="Node" left="1125" top="17385" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   <PIN pinname="String Type" slicecount="1" values="MultiLine">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="81" srcpinname="String Value" dstnodeid="80" dstpinname="Input String">
+   </LINK>
+   <LINK srcnodeid="78" srcpinname="Format" dstnodeid="81" dstpinname="Enum">
+   </LINK>
+   <LINK srcnodeid="56" srcpinname="Valid" dstnodeid="63" dstpinname="Y Input Value">
+   </LINK>
+   <LINK srcnodeid="56" srcpinname="Texture Format" dstnodeid="61" dstpinname="Enum">
+   </LINK>
+   <NODE systemname="LinearDepth (DX11.TextureFX)" filename="%VVVV%\packs\dx11\nodes\texture11\Filter\LinearDepth.tfx" nodename="LinearDepth (DX11.TextureFX)" componentmode="Hidden" id="83">
+   <BOUNDS type="Node" left="2325" top="15495" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Texture In" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Texture Out" visible="1">
+   </PIN>
+   <PIN pinname="Technique" slicecount="1" values="LinearDepth">
+   </PIN>
+   </NODE>
+   <NODE systemname="Context (RSSDK)" filename="%VVVV%\packs\VVVV.Packs.RSSDK\nodes\plugins\VVVV.Nodes.RSSDK.dll" nodename="Context (RSSDK)" componentmode="Hidden" id="17">
+   <BOUNDS type="Node" left="450" top="10920" width="10740" height="270">
+   </BOUNDS>
+   <PIN pinname="DeviceInfo" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Status" visible="1">
+   </PIN>
+   <PIN pinname="Enabled" visible="1">
+   </PIN>
+   <PIN pinname="Enable Mirror" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Enable Color" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Enable Depth" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Enable IR" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Enable Blob" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="Enable Hand" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="Mirror" visible="1">
+   </PIN>
+   <PIN pinname="Sync Streams" visible="1">
+   </PIN>
+   <PIN pinname="Enable Stream" visible="1">
+   </PIN>
+   <PIN pinname="Stream Settings" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Enable Streams" visible="1">
+   </PIN>
+   <PIN pinname="Stream" visible="1">
+   </PIN>
+   <PIN pinname="Depth" slicecount="1" visible="1" values="Disabled">
+   </PIN>
+   <PIN pinname="IR" slicecount="1" visible="1" values="|Y8 640x480@60|">
+   </PIN>
+   <PIN pinname="Color" slicecount="1" visible="1" values="Disabled">
+   </PIN>
+   <PIN pinname="Context" visible="1">
+   </PIN>
+   <PIN pinname="Connected" visible="1">
+   </PIN>
+   <PIN pinname="Enable Face" visible="1">
+   </PIN>
+   <PIN pinname="Enable 3DSeg" visible="1">
+   </PIN>
+   <PIN pinname="Accurancy" slicecount="1" visible="1" values="COARSE">
+   </PIN>
+   <PIN pinname="Filter" slicecount="1" visible="1" values="VeryFarRange">
+   </PIN>
+   <PIN pinname="LaserPower" slicecount="1" visible="1" values="16">
+   </PIN>
+   <PIN pinname="MotionTradeOff" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="17" srcpinname="Status" dstnodeid="18" dstpinname="Input String">
+   </LINK>
+   <LINK srcnodeid="19" srcpinname="Y Output Value" dstnodeid="17" dstpinname="Enabled">
+   </LINK>
+   <LINK srcnodeid="42" srcpinname="Y Output Value" dstnodeid="17" dstpinname="Mirror">
+   </LINK>
+   <LINK srcnodeid="43" srcpinname="Y Output Value" dstnodeid="17" dstpinname="Sync Streams">
+   </LINK>
+   <LINK srcnodeid="25" srcpinname="Output Node" dstnodeid="17" dstpinname="DeviceInfo">
+   </LINK>
+   <LINK srcnodeid="17" srcpinname="Connected" dstnodeid="54" dstpinname="Y Input Value">
+   </LINK>
+   <LINK srcnodeid="64" srcpinname="Y Output Value" dstnodeid="17" dstpinname="Enable Face">
+   </LINK>
+   <LINK srcnodeid="65" srcpinname="Y Output Value" dstnodeid="17" dstpinname="Enable Blob">
+   </LINK>
+   <LINK srcnodeid="66" srcpinname="Y Output Value" dstnodeid="17" dstpinname="Enable Hand">
+   </LINK>
+   <LINK srcnodeid="67" srcpinname="Y Output Value" dstnodeid="17" dstpinname="Enable 3DSeg">
+   </LINK>
+   <LINK srcnodeid="71" srcpinname="Output Enum" dstnodeid="17" dstpinname="Color">
+   </LINK>
+   <LINK srcnodeid="72" srcpinname="Output Enum" dstnodeid="17" dstpinname="Depth">
+   </LINK>
+   <LINK srcnodeid="73" srcpinname="Output Enum" dstnodeid="17" dstpinname="IR">
+   </LINK>
+   <NODE nodename="IOBox (Enumerations)" componentmode="InABox" id="84" systemname="IOBox (Enumerations)">
+   <BOUNDS type="Box" left="5130" top="14325" width="2085" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="5130" top="14325" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Input Enum" slicecount="1" visible="1" values="IVCAM_ACCURACY_FINEST">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Accurancy">
+   </PIN>
+   <PIN pinname="Output Enum" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="84" srcpinname="Output Enum" dstnodeid="17" dstpinname="Accurancy">
+   </LINK>
+   <NODE nodename="IOBox (Enumerations)" componentmode="InABox" id="85" systemname="IOBox (Enumerations)">
+   <BOUNDS type="Box" left="5535" top="14850" width="1425" height="255">
+   </BOUNDS>
+   <BOUNDS type="Node" left="5535" top="14850" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Input Enum" slicecount="1" visible="1" values="VeryFarRange">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Filter">
+   </PIN>
+   <PIN pinname="Output Enum" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="85" srcpinname="Output Enum" dstnodeid="17" dstpinname="Filter">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="86" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="6015" top="15495" width="390" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="6015" top="15495" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="16">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="LaserPower">
+   </PIN>
+   <PIN pinname="Y Output Value" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="86" srcpinname="Y Output Value" dstnodeid="17" dstpinname="LaserPower">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="87" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="6420" top="15915" width="405" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="6420" top="15915" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="MotionTradeOff">
+   </PIN>
+   <PIN pinname="Y Output Value" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="87" srcpinname="Y Output Value" dstnodeid="17" dstpinname="MotionTradeOff">
+   </LINK>
+   <NODE systemname="F200 Settings (RSSDK)" filename="%VVVV%\packs\VVVV.Packs.RSSDK\nodes\plugins\VVVV.Nodes.RSSDK.dll" nodename="F200 Settings (RSSDK)" componentmode="Hidden" id="90">
+   <BOUNDS type="Node" left="4680" top="16350" width="1800" height="270">
+   </BOUNDS>
+   <PIN pinname="Context" visible="1">
+   </PIN>
+   <PIN pinname="Accurancy" visible="1">
+   </PIN>
+   <PIN pinname="Filter" visible="1">
+   </PIN>
+   <PIN pinname="LaserPower" visible="1">
+   </PIN>
+   <PIN pinname="MotionTradeOff" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="17" srcpinname="Context" dstnodeid="90" dstpinname="Context">
+   </LINK>
+   <LINK srcnodeid="84" srcpinname="Output Enum" dstnodeid="90" dstpinname="Accurancy">
+   </LINK>
+   <LINK srcnodeid="85" srcpinname="Output Enum" dstnodeid="90" dstpinname="Filter">
+   </LINK>
+   <LINK srcnodeid="86" srcpinname="Y Output Value" dstnodeid="90" dstpinname="LaserPower">
+   </LINK>
+   <LINK srcnodeid="87" srcpinname="Y Output Value" dstnodeid="90" dstpinname="MotionTradeOff">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="91" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="6420" top="16815" width="795" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="6420" top="16815" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="MotionTradeOff">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="90" srcpinname="MotionTradeOff" dstnodeid="91" dstpinname="Y Input Value">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="92" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="5835" top="17385" width="345" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="5835" top="17385" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="LaserPower">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="90" srcpinname="LaserPower" dstnodeid="92" dstpinname="Y Input Value">
+   </LINK>
+   <LINK srcnodeid="56" srcpinname="Texture Out" dstnodeid="57" dstpinname="Texture" linkstyle="Bezier">
+   <LINKPOINT x="495" y="13898">
+   </LINKPOINT>
+   <LINKPOINT x="795" y="13898">
+   </LINKPOINT>
+   </LINK>
+   <LINK srcnodeid="56" srcpinname="Texture Out" dstnodeid="78" dstpinname="Texture In">
+   <LINKPOINT x="0" y="15562">
+   </LINKPOINT>
+   </LINK>
+   <NODE systemname="RGB (RSSDK)" filename="%VVVV%\packs\VVVV.Packs.RSSDK\nodes\plugins\VVVV.Nodes.RSSDK.dll" nodename="RGB (RSSDK)" componentmode="Hidden" id="94">
+   <BOUNDS type="Node" left="450" top="12480" width="4035" height="270">
+   </BOUNDS>
+   <PIN pinname="Context" visible="1">
+   </PIN>
+   <PIN pinname="Color" visible="1">
+   </PIN>
+   <PIN pinname="Refresh" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Enabled" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="AutoWhiteBalance" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="AutoExposure" slicecount="2" values="1,1">
+   </PIN>
+   <PIN pinname="Exposure" slicecount="3" values="-7,-7,-7">
+   </PIN>
+   <PIN pinname="Contrast" slicecount="1" values="32">
+   </PIN>
+   <PIN pinname="Brightness" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="PowerLineFrequency" slicecount="1" values="POWER_LINE_FREQUENCY_50HZ">
+   </PIN>
+   <PIN pinname="Gamma" slicecount="1" values="220">
+   </PIN>
+   <PIN pinname="Gain" slicecount="1" values="32">
+   </PIN>
+   <PIN pinname="WhiteBalance" slicecount="1" values="3200">
+   </PIN>
+   <PIN pinname="Saturation" slicecount="1" values="128">
+   </PIN>
+   <PIN pinname="Sharpness" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Reset" visible="1">
+   </PIN>
+   <PIN pinname="SetSettings" visible="-1" slicecount="1" pintype="Input" values="0">
+   </PIN>
+   <PIN pinname="BackLightCompensation" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="17" srcpinname="Context" dstnodeid="94" dstpinname="Context">
+   </LINK>
+   <LINK srcnodeid="94" srcpinname="Color" dstnodeid="56" dstpinname="Input">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="96" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="1770" top="11490" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="1770" top="11490" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Bang">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Refresh">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="96" srcpinname="Y Output Value" dstnodeid="94" dstpinname="Refresh">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="97" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="3120" top="11670" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="3120" top="11670" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Bang">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Reset">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="97" srcpinname="Y Output Value" dstnodeid="94" dstpinname="Reset">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="99" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="4410" top="11610" width="480" height="480">
+   </BOUNDS>
+   <BOUNDS type="Node" left="4410" top="11610" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" visible="1" values="1">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Toggle">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Enabled">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="99" srcpinname="Y Output Value" dstnodeid="94" dstpinname="Enabled">
+   </LINK>
+   <NODE systemname="IR (RSSDK)" filename="%VVVV%\packs\VVVV.Packs.RSSDK\nodes\plugins\VVVV.Nodes.RSSDK.dll" nodename="IR (RSSDK)" componentmode="Hidden" id="100">
+   <BOUNDS type="Node" left="3345" top="17880" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Context" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="17" srcpinname="Context" dstnodeid="100" dstpinname="Context">
+   </LINK>
+   </PATCH>
