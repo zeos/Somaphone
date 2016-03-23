@@ -17,6 +17,7 @@ Hardware components:
 4. SparkFun Block for Intel® Edison - ADC - https://www.sparkfun.com/products/retired/13046
 
 5. SparkFun Block for Intel® Edison - Base - https://www.sparkfun.com/products/13045
+(Needed only for programming/debugging)
 
 6. Reset button
 
